@@ -1,0 +1,144 @@
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+app.use(bodyParser.json());
+
+//Include modules
+Kids = require('./models/kids');
+Parents = require('./models/parents');
+Reports = require('./models/reports');
+
+//Connection
+mongoose.connect('mongodb://localhost/childcare');
+var db = mongoose.connection;
+
+// **Get routes**
+app.get('/', function(req, res) {
+  res.send('use api end point');
+});
+
+//  Kids
+//Get all kids
+app.get('/api/kids', function(req, res) {
+  Kids.getKids(function(err, kids) {
+    if (err) {
+      throw err;
+    }
+    res.json(kids);
+  });
+});
+
+//Get all kids names
+app.get('/api/kidsnames', function(req, res) {
+  Kids.getKidsNames(function(err, kidsnames) {
+    if (err) {
+      throw err;
+    }
+    res.json(kidsnames);
+  });
+});
+
+// Get a single kid by ID
+app.get('/api/kids/:_id', function(req, res) {
+  Kids.getKidById(req.params._id, function(err, kid) {
+    if (err) {
+      throw err;
+    }
+    res.json(kid);
+  });
+});
+
+// Parents
+// Get all parents
+app.get('/api/parents', function(req, res) {
+  Parents.getParents(function(err, parents) {
+    if (err) {
+      throw err;
+    }
+    res.json(parents);
+  });
+});
+
+// Get a single parents by ID
+app.get('/api/parents/:_id', function(req, res) {
+  Parents.getParentById(req.params._id, function(err, parent) {
+    if (err) {
+      throw err;
+    }
+    res.json(parent);
+  });
+});
+
+// Reports
+// Get all reports
+
+app.get('/api/reports', function(req, res) {
+  Reports.getReports(function(err, reports) {
+    if (err) {
+      throw err;
+    }
+    res.json(reports);
+  });
+});
+
+// Get a single reports by ID
+app.get('/api/reports/:_id', function(req, res) {
+  Reports.getReportById(req.params._id, function(err, report) {
+    if (err) {
+      throw err;
+    }
+    res.json(report);
+  });
+});
+
+// **Post routes**
+// Add kid
+app.post('/api/kids', function(req, res) {
+  var kid = req.body;
+  Kids.addKid(kid, function(err, kid) {
+    if (err) {
+      throw err;
+    }
+    res.json(kid);
+  });
+});
+
+// Add report
+app.post('/api/reports', function(req, res) {
+  var report = req.body;
+  Reports.addReport(report, function(err, report) {
+    if (err) {
+      throw err;
+    }
+    res.json(report);
+  });
+});
+
+// **Put routes**
+// Update kid
+app.put('/api/kids/:_id', function(req, res) {
+  var id = req.params._id;
+  var kid = req.body;
+  Kids.updateKid(id, kid, {}, function(err, kid) {
+    if (err) {
+      throw err;
+    }
+    res.json(kid);
+  });
+});
+
+// **Delete routes**
+app.delete('/api/kids/:_id', function(req, res) {
+  var id = req.params._id;
+  Kids.deleteKid(id, function(err, kid) {
+    if (err) {
+      throw err;
+    }
+    res.json(kid);
+  });
+});
+
+app.listen(3000);
+console.log('running on prot 3000');
