@@ -2,38 +2,66 @@ var mongoose = require('mongoose');
 
 //Schema
 var reportSchema = mongoose.Schema({
-  main_report:{
+  main_report: {
     type: String,
-    required: true
+    required: true,
   },
-  next_steps:{
+  next_steps: {
     type: String,
-    required: true
+    // required: true
   },
-  report_date:{
+  report_date: {
     type: Date,
     default: Date.now,
     // required: true
   },
-  kid:{
+  kid: {
     type: String,
-    required: true
-  }
+    // required: true
+  },
+  checked1: {
+    type: String,
+    // required: true
+  },
+  checked2: {
+    type: String,
+    // required: true
+  },
+  checked3: {
+    type: String,
+    // required: true
+  },
+  checked4: {
+    type: String,
+    // required: true
+  },
+  checked5: {
+    type: String,
+    // required: true
+  },
+  checked6: {
+    type: String,
+    // required: true
+  },
+  checked7: {
+    type: String,
+    // required: true
+  },
 });
 
 var Reports = module.exports = mongoose.model('Reports', reportSchema);
 
 // get reports
-module.exports.getReports = function(callback, limit){
+module.exports.getReports = function (callback, limit) {
   Reports.find(callback).limit(limit);
 };
 
 // get report by ID
-module.exports.getReportById = function(id, callback){
+module.exports.getReportById = function (id, callback) {
   Reports.findById(id, callback);
 };
 
 // add report
-module.exports.addReport = function(report, callback){
+module.exports.addReport = function (report, callback) {
   Reports.create(report, callback);
 };
