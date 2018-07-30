@@ -8,44 +8,44 @@ var reportSchema = mongoose.Schema({
   },
   next_steps: {
     type: String,
-    // required: true
+    required: true,
   },
   report_date: {
     type: Date,
     default: Date.now,
-    // required: true
+    required: true,
   },
   kid: {
     type: String,
-    // required: true
+    required: true,
   },
   checked1: {
     type: String,
-    // required: true
+    required: true,
   },
   checked2: {
     type: String,
-    // required: true
+    required: true,
   },
   checked3: {
     type: String,
-    // required: true
+    required: true,
   },
   checked4: {
     type: String,
-    // required: true
+    required: true,
   },
   checked5: {
     type: String,
-    // required: true
+    required: true,
   },
   checked6: {
     type: String,
-    // required: true
+    required: true,
   },
   checked7: {
     type: String,
-    // required: true
+    required: true,
   },
 });
 
