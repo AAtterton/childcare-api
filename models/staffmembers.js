@@ -33,7 +33,7 @@ module.exports.getStaffMembers = function (callback, limit) {
 
 // get staff passcode by username
 module.exports.getStaffMembersPassCodeByUserName = function (username, callback) {
-  let fields = { passcode: 1, staff_ID: 1 };
+  let fields = { user_name: 1, passcode: 1, staff_ID: 1 };
   let query = { user_name: username.user_name };
   StaffMembers.findOne(query, fields, callback);
 };

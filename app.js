@@ -85,16 +85,29 @@ app.get('/api/parents/:_id', function (req, res) {
 app.get('/api/parents/user_name/:user_name/passcode/:passcode', function (req, res) {
   Parents.getParentPassCodeByUserName(req.params, function (err, parent) {
     if (err) {
-      throw err;
+      throw(err);
     } else {
-      if (parent.passcode === req.params.passcode) {
-        parent.passcode = true;
+      if (parent == null) {
+        parent = {
+          user_name: false,
+          passcode: false,
+        };
+        res.json(parent);
       } else {
-        parent.passcode = false;
+        if (
+          parent.user_name === req.params.user_name &&
+          parent.passcode === req.params.passcode) {
+          parent.user_name = true;
+          parent.passcode = true;
+        } else {
+          parent.user_name = false;
+          parent.passcode = false;
+        }
+
+        res.json(parent);
       }
     }
 
-    res.json(parent);
   });
 });
 
@@ -116,17 +129,30 @@ app.get('/api/staffmembers/user_name/:user_name/passcode/:passcode/staff_ID/:sta
     if (err) {
       throw err;
     } else {
-      if (staffmember.passcode === req.params.passcode &&
-          staffmember.staff_ID === req.params.staff_ID) {
-        staffmember.passcode = true;
-        staffmember.staff_ID = true;
+      if (staffmember == null) {
+        staffmember = {
+          user_name: false,
+          passcode: false,
+          staff_ID: false,
+        };
+        res.json(staffmember);
       } else {
-        staffmember.passcode = false;
-        staffmember.staff_ID = false;
+        if (
+          staffmember.user_name === req.params.user_name &&
+          staffmember.passcode === req.params.passcode &&
+          staffmember.staff_ID === req.params.staff_ID) {
+          staffmember.user_name = true;
+          staffmember.passcode = true;
+          staffmember.staff_ID = true;
+        } else {
+          staffmember.user_name = false;
+          staffmember.passcode = false;
+          staffmember.staff_ID = false;
+        }
       }
-    }
 
-    res.json(staffmember);
+      res.json(staffmember);
+    }
   });
 });
 

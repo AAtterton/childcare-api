@@ -38,7 +38,7 @@ module.exports.getParentById = function (id, callback) {
 
 // get parent passcode by username
 module.exports.getParentPassCodeByUserName = function (username, callback) {
-  let fields = { passcode: 1 };
+  let fields = { user_name: 1, passcode: 1 };
   let query = { user_name: username.user_name };
   Parents.findOne(query, fields, callback);
 };
