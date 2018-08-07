@@ -54,5 +54,5 @@ module.exports.updateKid = function (id, kid, options, callback) {
 // delete kid
 module.exports.deleteKid = function (id, callback) {
   var query = { _id: id };
-  Kids.remove(query, callback);
+  Kids.findByIdAndRemove(query, callback);
 };

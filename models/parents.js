@@ -47,3 +47,9 @@ module.exports.getParentPassCodeByUserName = function (username, callback) {
 module.exports.addParent = function (parent, callback) {
   Parents.create(parent, callback);
 };
+
+// delete parent
+module.exports.deleteParent = function (id, callback) {
+  var query = { _id: id };
+  Parents.findByIdAndRemove(query, callback);
+};

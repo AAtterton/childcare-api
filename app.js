@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 Kids = require('./models/kids');
 Parents = require('./models/parents');
 Reports = require('./models/reports');
-StaffMembers = require('./models/staffmembers');
+Employees = require('./models/employees');
 
 //Connection
 mongoose.connect('mongodb://localhost/childcare');
@@ -20,11 +20,11 @@ app.get('/', function (req, res) {
   res.send('use api end point');
 });
 
-app.get('/', function (req, res) {
-  res.send('use specific end point (parents/kids/reports/staffmembers)');
+app.get('/api/', function (req, res) {
+  res.send('use specific end point (parents/kids/reports/employees)');
 });
 
-// Kids
+// **Kids**
 // Get all kids
 app.get('/api/kids', function (req, res) {
   Kids.getKids(function (err, kids) {
@@ -58,7 +58,7 @@ app.get('/api/kids/:_id', function (req, res) {
   });
 });
 
-// Parents
+// **Parents**
 // Get all parents
 app.get('/api/parents', function (req, res) {
   Parents.getParents(function (err, parents) {
@@ -111,52 +111,52 @@ app.get('/api/parents/user_name/:user_name/passcode/:passcode', function (req, r
   });
 });
 
-// Staff
-// Get all staff
-app.get('/api/staffmembers', function (req, res) {
-  StaffMembers.getStaffMembers(function (err, staffmembers) {
+// **Employees**
+// Get all employees
+app.get('/api/employees', function (req, res) {
+  Employees.getEmployees(function (err, employees) {
     if (err) {
       throw err;
     }
 
-    res.json(staffmembers);
+    res.json(employees);
   });
 });
 
-// Get a single staffmembers by username and check passcode
-app.get('/api/staffmembers/user_name/:user_name/passcode/:passcode/staff_ID/:staff_ID', function (req, res) {
-  StaffMembers.getStaffMembersPassCodeByUserName(req.params, function (err, staffmember) {
+// Get a single employee by username and check passcode
+app.get('/api/employees/user_name/:user_name/passcode/:passcode/employee_id/:employee_id', function (req, res) {
+  Employees.checkEmployeePass(req.params, function (err, employee) {
     if (err) {
       throw err;
     } else {
-      if (staffmember == null) {
-        staffmember = {
+      if (employee == null) {
+        employee = {
           user_name: false,
           passcode: false,
-          staff_ID: false,
+          employee_ID: false,
         };
-        res.json(staffmember);
+        res.json(employee);
       } else {
         if (
-          staffmember.user_name === req.params.user_name &&
-          staffmember.passcode === req.params.passcode &&
-          staffmember.staff_ID === req.params.staff_ID) {
-          staffmember.user_name = true;
-          staffmember.passcode = true;
-          staffmember.staff_ID = true;
+          employee.user_name === req.params.user_name &&
+          employee.passcode === req.params.passcode &&
+          employee.employee_ID === req.params.employee_ID) {
+          employee.user_name = true;
+          employee.passcode = true;
+          employee.employee_ID = true;
         } else {
-          staffmember.user_name = false;
-          staffmember.passcode = false;
-          staffmember.staff_ID = false;
+          employee.user_name = false;
+          employee.passcode = false;
+          employee.employee_ID = false;
         }
       }
 
-      res.json(staffmember);
+      res.json(employee);
     }
   });
 });
 
-// Reports
+// **Reports**
 // Get all reports
 app.get('/api/reports', function (req, res) {
   Reports.getReports(function (err, reports) {
@@ -180,7 +180,7 @@ app.get('/api/reports/:_id', function (req, res) {
 });
 
 // **Post routes**
-// Add kid
+// Kids
 app.post('/api/kids', function (req, res) {
   var kid = req.body;
   Kids.addKid(kid, function (err, kid) {
@@ -192,7 +192,7 @@ app.post('/api/kids', function (req, res) {
   });
 });
 
-// Add report
+// Reports
 app.post('/api/reports', function (req, res) {
   var report = req.body;
   Reports.addReport(report, function (err, report) {
@@ -204,7 +204,7 @@ app.post('/api/reports', function (req, res) {
   });
 });
 
-// Add parent
+// Parents
 app.post('/api/parents', function (req, res) {
   var parent = req.body;
   Parents.addParent(parent, function (err, kid) {
@@ -216,12 +216,24 @@ app.post('/api/parents', function (req, res) {
   });
 });
 
+// Employees
+app.post('/api/employees', function (req, res) {
+  var employee = req.body;
+  Employees.addEmployee(employee, function (err, employee) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(employee);
+  });
+});
+
 // **Put routes**
-// Update kid
+// Kids
 app.put('/api/kids/:_id', function (req, res) {
   var id = req.params._id;
   var kid = req.body;
-  Kids.updateKid(id, kid, {}, function (err, kid) {
+  Kids.updateKid(id, kid, { new: true }, function (err, kid) {
     if (err) {
       throw err;
     }
@@ -230,7 +242,47 @@ app.put('/api/kids/:_id', function (req, res) {
   });
 });
 
+// Reports
+app.put('/api/reports/:_id', function (req, res) {
+  var id = req.params._id;
+  var report = req.body;
+  Reports.updateReport(id, report, { new: true }, function (err, report) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(report);
+  });
+});
+
+// Parents
+app.put('/api/parents/:_id', function (req, res) {
+  var id = req.params._id;
+  var parent = req.body;
+  Parents.updateParent(id, parent, { new: true }, function (err, parent) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(parent);
+  });
+});
+
+// Employees
+app.put('/api/employees/:_id', function (req, res) {
+  var id = req.params._id;
+  var employee = req.body;
+  Employees.updateEmployees(id, employee, { new: true }, function (err, employee) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(employee);
+  });
+});
+
 // **Delete routes**
+// Kids
 app.delete('/api/kids/:_id', function (req, res) {
   var id = req.params._id;
   Kids.deleteKid(id, function (err, kid) {
@@ -239,6 +291,42 @@ app.delete('/api/kids/:_id', function (req, res) {
     }
 
     res.json(kid);
+  });
+});
+
+// Employees
+app.delete('/api/employees/:_id', function (req, res) {
+  var id = req.params._id;
+  Employees.deleteEmployee(id, function (err, employee) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(employee);
+  });
+});
+
+// Parents
+app.delete('/api/parents/:_id', function (req, res) {
+  var id = req.params._id;
+  Parents.deleteParent(id, function (err, parent) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(parent);
+  });
+});
+
+// Reports
+app.delete('/api/reports/:_id', function (req, res) {
+  var id = req.params._id;
+  Reports.deleteReport(id, function (err, report) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(report);
   });
 });
 

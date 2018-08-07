@@ -65,3 +65,9 @@ module.exports.getReportById = function (id, callback) {
 module.exports.addReport = function (report, callback) {
   Reports.create(report, callback);
 };
+
+// delete Staff
+module.exports.deleteReport = function (id, callback) {
+  var query = { _id: id };
+  Reports.findByIdAndRemove(query, callback);
+};
