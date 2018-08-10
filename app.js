@@ -10,6 +10,7 @@ Kids = require('./models/kids');
 Parents = require('./models/parents');
 Reports = require('./models/reports');
 Employees = require('./models/employees');
+Photos = require('./models/photos');
 
 //Connection
 mongoose.connect('mongodb://localhost/childcare');
@@ -21,7 +22,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/', function (req, res) {
-  res.send('use specific end point (parents/kids/reports/employees)');
+  res.send('use specific end point (parents/kids/reports/employees/photos)');
 });
 
 // **Kids**
@@ -179,6 +180,18 @@ app.get('/api/reports/:_id', function (req, res) {
   });
 });
 
+// **Photos**
+// Get all photos
+app.get('/api/photos', function (req, res) {
+  Photos.getPhotos(function (err, photos) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(photos);
+  });
+});
+
 // **Post routes**
 // Kids
 app.post('/api/kids', function (req, res) {
@@ -225,6 +238,19 @@ app.post('/api/employees', function (req, res) {
     }
 
     res.json(employee);
+  });
+});
+
+// Photos
+app.post('/api/photos', function (req, res) {
+  var photo = req.body;
+  console.log(photo);
+  Photos.addPhoto(photo, function (err, photo) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(photo);
   });
 });
 
